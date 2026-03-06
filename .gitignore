@@ -6,6 +6,14 @@ db.sqlite3-journal
 staticfiles/
 media/
 
+<<<<<<< HEAD
+=======
+# Environment Variables
+.env
+
+# Firebase Key (SENSITIVE)
+#firebase_key.json
+>>>>>>> 8ad39fe43f626bbb8e6a63cac3d84489f94befdc
 
 # Python
 __pycache__/
