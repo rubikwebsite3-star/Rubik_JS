@@ -76,7 +76,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'rubikproject.wsgi.application'
 
 
-# Database - Using in-memory to satisfy Django while keeping it 100% serverless
 # Database - Using SQLite for local persistent storage
 DATABASES = {
     'default': {
@@ -86,8 +85,21 @@ DATABASES = {
 }
 
 
-# Password validation - REMOVED as Django Auth is disabled
-AUTH_PASSWORD_VALIDATORS = []
+# Password validation
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 # Custom Cookie-based Messages (to avoid session dependency)
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'

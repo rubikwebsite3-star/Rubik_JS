@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # ImgBB / Firebase 
+    # ImgBB (Image Storage) 
     path("upload/", views.upload_image, name="upload_image"),
     path("show/", views.show_images, name="show_images"),
 
