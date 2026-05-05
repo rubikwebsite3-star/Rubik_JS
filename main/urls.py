@@ -2,9 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # Test Firebase connection
-    path('test/', views.test_firebase, name='test_firebase'),
-    
     # ImgBB / Firebase 
     path("upload/", views.upload_image, name="upload_image"),
     path("show/", views.show_images, name="show_images"),

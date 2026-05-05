@@ -18,7 +18,9 @@
 <section class="gallery">
     <div class="gallery-container">
         {% for img in images %}
-        <img src="{{ img.image.url }}" alt="{{ img.title|default:'Property Image' }}">
+        {% if img.image.url %}
+        <img src="{{ img.image.url }}" alt="{{ img.title|default:'Rubik Properties Gallery' }}" loading="lazy">
+        {% endif %}
         {% empty %}
         <p style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px;">No gallery images yet.</p>
         {% endfor %}
