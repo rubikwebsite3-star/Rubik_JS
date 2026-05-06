@@ -10,6 +10,7 @@ import uuid
 import re
 import os
 from .models import Category, GalleryImage, Listing
+from .firebase_utils import authenticate_admin
 
 # ─── Auth Decorator ──────────────────────────────────────────────
 
@@ -154,25 +155,21 @@ def contact(request):
 
 # ─── Admin Auth Views ─────────────────────────────────────────────
 
-from .models import CustomAdmin
-
 def admin_login_view(request):
     if request.method == 'POST':
         user_name = request.POST.get('username')
         pass_word = request.POST.get('password')
         
-        try:
-            admin = CustomAdmin.objects.get(username=user_name)
-            if check_password(pass_word, admin.password) or pass_word == admin.password:
-                # Check for both hashed and plain (for easier initial setup/transition)
-                request.session['admin_id'] = admin.pk
-                request.session['admin_username'] = admin.username
-                messages.success(request, f"Welcome back, {user_name}!")
-                return redirect('admin_dashboard')
-            else:
-                messages.error(request, "Invalid username or password.")
-        except CustomAdmin.DoesNotExist:
-            messages.error(request, "Invalid username or password.")
+        # Authenticate using Firebase Firestore
+        admin_data = authenticate_admin(user_name, pass_word)
+        
+        if admin_data:
+            request.session['admin_id'] = admin_data['id']
+            request.session['admin_username'] = admin_data['username']
+            messages.success(request, f"Welcome back, {user_name}!")
+            return redirect('admin_dashboard')
+        else:
+            messages.error(request, "Invalid username or password (Firebase).")
             
     return render(request, 'main/admin_login.html')
 

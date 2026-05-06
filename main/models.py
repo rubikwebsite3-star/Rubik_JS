@@ -59,9 +59,3 @@ class Listing(models.Model):
         return f"{self.property_code} - {self.owner_name}"
 
 
-class CustomAdmin(models.Model):
-    username = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=100) # Simple storage
-
-    def __str__(self):
-        return self.username
