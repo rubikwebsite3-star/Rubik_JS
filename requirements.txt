@@ -11,6 +11,9 @@ drf-yasg==1.21.10
 # --- Database ---
 psycopg2-binary==2.9.9
 PyMySQL==1.1.2
+dj-database-url==2.2.0
+psycopg2-binary==2.9.9
+PyMySQL==1.1.2
 
 # --- Core ML / Data (compatible set) ---
 numpy==1.24.3
