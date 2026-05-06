@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password, check_password
 from functools import wraps
 import requests
 import base64
@@ -17,7 +16,7 @@ from .models import Category, GalleryImage, Listing
 def admin_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
-        if not request.user.is_authenticated or not request.user.is_staff:
+        if not request.session.get('admin_id'):
             messages.error(request, "Please login as admin to access this page.")
             return redirect('admin_login')
         return view_func(request, *args, **kwargs)
@@ -155,25 +154,34 @@ def contact(request):
 
 # ─── Admin Auth Views ─────────────────────────────────────────────
 
+from .models import CustomAdmin
+
 def admin_login_view(request):
     if request.method == 'POST':
         user_name = request.POST.get('username')
         pass_word = request.POST.get('password')
         
-        user = authenticate(request, username=user_name, password=pass_word)
-            
-        if user is not None and user.is_staff:
-            login(request, user)
-            messages.success(request, f"Welcome back, {user_name}!")
-            return redirect('admin_dashboard')
-        else:
+        try:
+            admin = CustomAdmin.objects.get(username=user_name)
+            if check_password(pass_word, admin.password) or pass_word == admin.password:
+                # Check for both hashed and plain (for easier initial setup/transition)
+                request.session['admin_id'] = admin.pk
+                request.session['admin_username'] = admin.username
+                messages.success(request, f"Welcome back, {user_name}!")
+                return redirect('admin_dashboard')
+            else:
+                messages.error(request, "Invalid username or password.")
+        except CustomAdmin.DoesNotExist:
             messages.error(request, "Invalid username or password.")
             
     return render(request, 'main/admin_login.html')
 
 
 def admin_logout_view(request):
-    logout(request)
+    if 'admin_id' in request.session:
+        del request.session['admin_id']
+    if 'admin_username' in request.session:
+        del request.session['admin_username']
     messages.info(request, "You have been logged out.")
     return redirect('admin_login')
 
@@ -212,7 +220,7 @@ def admin_dashboard_view(request):
         'offer_count': offers.count(),
         'request_count': requests_list.count(),
         'pending_offer_count': pending_count,
-        'admin_user': request.user.username,
+        'admin_user': request.session.get('admin_username', 'Admin'),
     })
 
 
