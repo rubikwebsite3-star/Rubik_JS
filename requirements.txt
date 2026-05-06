@@ -7,7 +7,7 @@ crispy-bootstrap5==0.7
 django-multiselectfield==1.0.1
 djangorestframework-simplejwt==5.3.1
 drf-yasg==1.21.10
-python-dotenv==1.0.1
+
 # --- Database ---
 psycopg2-binary==2.9.9
 PyMySQL==1.1.2
@@ -21,6 +21,7 @@ scipy==1.11.4
 # --- Image processing ---
 opencv-python==4.9.0.80
 Pillow==10.4.0
+python-dotenv==1.0.1
 
 # --- TensorFlow (safe pairing with numpy<2) ---
 tensorflow==2.13.0
