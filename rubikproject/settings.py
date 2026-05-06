@@ -30,8 +30,6 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-fallback-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-import os
-
 ALLOWED_HOSTS = [
     "rubikcorrect-production.up.railway.app",
     "localhost",
