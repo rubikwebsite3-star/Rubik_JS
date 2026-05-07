@@ -1,13 +1,16 @@
 services:
   - type: web
-    name: rubikproject
-    env: python
-    buildCommand: "./build.sh"
-    startCommand: "gunicorn rubikproject.wsgi:application"
+    name: rubik-backend
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "npm start"
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.4
+      - key: NODE_VERSION
+        value: 20.0.0
       - key: SECRET_KEY
         generateValue: true
-      - key: WEB_CONCURRENCY
-        value: 4
+      - key: IMGBB_API_KEY
+        sync: false
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false
